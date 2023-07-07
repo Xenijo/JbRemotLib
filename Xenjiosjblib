@@ -354,10 +354,10 @@ for keyName, keyFunction in next, keyFunctions do
         end
     end
 end
+
 --// Return variables
-
 local environment = getgenv()
-
 environment.networkKeys, environment.network = networkKeys, network
 
 return networkKeys, network
+
