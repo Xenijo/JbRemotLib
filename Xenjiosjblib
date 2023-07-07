@@ -1,4 +1,11 @@
 --// Check if already in env
+local Lib  = {}
+
+function Lib:getNetworkKeys()
+if networkKeys and network then 
+    return networkKeys, network
+end
+end
 
 if networkKeys and network then 
     return networkKeys, network
