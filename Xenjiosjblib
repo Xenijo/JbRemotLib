@@ -337,25 +337,23 @@ end
 end
 
 --// Fetch keys from functions
-
 for keyName, keyFunction in next, keyFunctions do
-local success, errorMessage = pcall(function()
-networkKeys[keyName] = fetchKey(keyFunction()) or "Failed to fetch key"
-end)
+    local success, errorMessage = pcall(function()
+        networkKeys[keyName] = fetchKey(keyFunction()) or "Failed to fetch key"
+    end)
 
-if not success or networkKeys[keyName] == "Failed to fetch key" then
-    if backupKeys[keyName] then
-        success, errorMessage = pcall(function()
-            networkKeys[keyName] = fetchKey(keyFunction(true)) or "Failed to fetch key"
-        end)
-    end
+    if not success or networkKeys[keyName] == "Failed to fetch key" then
+        if backupKeys[keyName] then
+            success, errorMessage = pcall(function()
+                networkKeys[keyName] = fetchKey(keyFunction(true)) or "Failed to fetch key"
+            end)
+        end
 
-    if not success then
-        networkKeys[keyName] = ("Failed to fetch key ( %s )"):format(errorMessage)
+        if not success then
+            networkKeys[keyName] = ("Failed to fetch key ( %s )"):format(errorMessage)
+        end
     end
 end
-end
-
 --// Return variables
 
 local environment = getgenv()
