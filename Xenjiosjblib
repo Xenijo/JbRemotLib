@@ -1,10 +1,19 @@
--- Variables
---Optimized by ChatGPT 3.5
+--// Check if already in env
+
+if networkKeys and network then 
+    return networkKeys, network
+end
+
+--// Variables 
+
 local startTime = tick()
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
+
 local network = getupvalue(require(ReplicatedStorage.Module.AlexChassis).SetEvent, 1)
 local keysList = getupvalue(getupvalue(network.FireServer, 1), 3)
+
 local gameFolder = ReplicatedStorage.Game
 local robloxEnvironment = getrenv()
 
@@ -37,7 +46,7 @@ for index, value in next, getrenv() do -- soooo bad
     end
 end
 
--- Functions
+--// Functions
 
 local function fetchKey(callerFunction, keyIndex)
     keyIndex = keyIndex or 1
@@ -84,8 +93,10 @@ local function fetchKey(callerFunction, keyIndex)
                 for character in key:gmatch("(%w)") do -- make sure every character in the key shows up
                     if not table.find(currentConstantCharacters, character) then
                         charactersValid = false
+                        
                         break
                     end
+                    
                     table.remove(currentConstantCharacters, table.find(currentConstantCharacters, character))
                 end
                 
@@ -122,8 +133,6 @@ local function errorHandle(callback)
 
     return returnValue
 end
-
--- Fetch functions for keys
 
 --// Fetch functions for keys
 
@@ -198,189 +207,159 @@ do -- arrest / pickpocket / breakout
         end
     end
 
-    keyFunctions.Pickpocket = function()
-        return getupvalue(characterInteractFunction, 3)
-   Apologies, I mistakenly removed the remaining part of the code. Here's the complete code starting from the "Fetch functions for keys" section:
+keyFunctions.Pickpocket = function()
+return getupvalue(characterInteractFunction, 3)
+end
 
-```lua
-do -- arrest / pickpocket / breakout
-    local characterInteractFunction = errorHandle(function()
-        return getupvalue(getupvalue(require(ReplicatedStorage.App.CharacterBinder)._classAddedSignal._handlerListHead._fn, 1), 2)
-    end)
-
-    keyFunctions.Arrest = function(backup)
-        if backup then
-            return getupvalue(getupvalue(characterInteractFunction, 1), 7)
-        else
-            return getupvalue(characterInteractFunction, 1)
-        end
-    end
-
-    keyFunctions.Pickpocket = function()
-        return getupvalue(characterInteractFunction, 3)
-    end
-    
-    keyFunctions.Breakout = function()
-        return getupvalue(characterInteractFunction, 4)
-    end
+keyFunctions.Breakout = function()
+    return getupvalue(characterInteractFunction, 4)
+end
 end
 
 do -- broadcastinputbegan / broadcastinputended
-    keyFunctions.BroadcastInputBegan = function()
-        return getproto(itemSystem._equip, 5)
-    end
-
-    keyFunctions.BroadcastInputEnded = function()
-        return getproto(itemSystem._equip, 6)
-    end
+keyFunctions.BroadcastInputBegan = function()
+return getproto(itemSystem._equip, 5)
+end
+keyFunctions.BroadcastInputEnded = function()
+    return getproto(itemSystem._equip, 6)
+end
 end
 
 do -- eject / hijack / entercar
-    local seatInteractFunction = errorHandle(function()
-        return getupvalue(getconnections(CollectionService:GetInstanceAddedSignal("VehicleSeat"))[1].Function, 1)
-    end)
-    
-    keyFunctions.Hijack = function()
-        return getupvalue(seatInteractFunction, 1)
-    end
+local seatInteractFunction = errorHandle(function()
+return getupvalue(getconnections(CollectionService:GetInstanceAddedSignal("VehicleSeat"))[1].Function, 1)
+end)
 
-    keyFunctions.Eject = function()
-        return seatInteractFunction
-    end
+keyFunctions.Hijack = function()
+    return getupvalue(seatInteractFunction, 1)
+end
 
-    keyFunctions.EnterCar = function()
-        return getupvalue(seatInteractFunction, 3)
-    end
+keyFunctions.Eject = function()
+    return seatInteractFunction
+end
+
+keyFunctions.EnterCar = function()
+    return getupvalue(seatInteractFunction, 3)
+end
 end
 
 do -- robstart / robend
-    local robFunction = errorHandle(function()
-        return getupvalue(getconnections(CollectionService:GetInstanceAddedSignal("SmallStore"))[1].Function, 1)
-    end)
+local robFunction = errorHandle(function()
+return getupvalue(getconnections(CollectionService:GetInstanceAddedSignal("SmallStore"))[1].Function, 1)
+end)
 
-    keyFunctions.RobEnd = function()
-        return robFunction
-    end
-    
-    keyFunctions.RobStart = function()
-        return robFunction, 2
-    end
+keyFunctions.RobEnd = function()
+    return robFunction
+end
+
+keyFunctions.RobStart = function()
+    return robFunction, 2
+end
+
 end
 
 do -- opendoor
-    -- this may not work on all exploits, your exploit must support the gc argument for getproto
-    -- you can replace it with a gc search for a function with the constant "SequenceRequireState" if your exploit doesnt support this
+keyFunctions.OpenDoor = function()
+    local doorAddedFunction = getconnections(CollectionService:GetInstanceAddedSignal("Door"))[1].Function
 
-    keyFunctions.OpenDoor = function()
-        local doorAddedFunction = getconnections(CollectionService:GetInstanceAddedSignal("Door"))[1].Function
+    return getupvalue(getproto(getupvalue(doorAddedFunction, 2), 1, true)[1], 7)
+end
 
-        return getupvalue(getproto(getupvalue(doorAddedFunction, 2), 1, true)[1], 7)
-    end
+keyFunctions.OpenDoor = function()
+    local doorAddedFunction = getconnections(CollectionService:GetInstanceAddedSignal("Door"))[1].Function
+
+    return getupvalue(getproto(getupvalue(doorAddedFunction, 2), 1, true)[1], 7)
+end
 end
 
 do -- falldamage
-    keyFunctions.FallDamage = function()
-        return getupvalue(defaultActions.onJumpPressed._handlerListHead._next._fn, 4)
-    end
+keyFunctions.FallDamage = function()
+return getupvalue(defaultActions.onJumpPressed._handlerListHead._next._fn, 4)
+end
 end
 
 do -- equipgun / unequipgun / buygun
-    local displayGunList = errorHandle(function()
-        return getproto(require(gameFolder.GunShop.GunShopUI).displayList, 1)
-    end)
-    
-    keyFunctions.UnequipGun = function()
-        return displayGunList
-    end
-    
-    keyFunctions.EquipGun = function()
-        return displayGunList, 2
-    end
+local displayGunList = errorHandle(function()
+return getproto(require(gameFolder.GunShop.GunShopUI).displayList, 1)
+end)
 
-    keyFunctions.BuyGun = function()
-        return displayGunList, 3
-    end
+keyFunctions.UnequipGun = function()
+    return displayGunList
+end
+
+keyFunctions.EquipGun = function()
+    return displayGunList, 2
+end
+
+keyFunctions.BuyGun = function()
+    return displayGunList, 3
+end
 end
 
 do -- ragdoll
-    keyFunctions.Ragdoll = function()
-        return require(gameFolder.Falling).StartRagdolling
-    end
+keyFunctions.Ragdoll = function()
+return require(gameFolder.Falling).StartRagdolling
+end
 end
 
 do -- exception keys
-    local exceptionKeysFound, exceptionKeyCount = 0, 0
-    
-    for _ in next, exceptionKeys do
-        exceptionKeyCount += 1
-    end
-    
-    local success, errorMessage = pcall(function()
-        for key, clientFunction in next, getupvalue(teamChooseUI.Init, 2) do 
-            if typeof(clientFunction) == "function" then
-                for keyName, keyCheck in next, exceptionKeys do
-                    if keyCheck(clientFunction) then
-                        exceptionKeysFound += 1
-                        networkKeys[keyName] = key
+local exceptionKeysFound, exceptionKeyCount = 0, 0
+for _ in next, exceptionKeys do
+    exceptionKeyCount += 1
+end
 
-                        break
-                    end
-                end
-                
-                if exceptionKeysFound == exceptionKeyCount then
+local success, errorMessage = pcall(function()
+    for key, clientFunction in next, getupvalue(teamChooseUI.Init, 2) do 
+        if typeof(clientFunction) == "function" then
+            for keyName, keyCheck in next, exceptionKeys do
+                if keyCheck(clientFunction) then
+                    exceptionKeysFound += 1
+                    networkKeys[keyName] = key
+
                     break
                 end
             end
-        end
-    end)
-
-    if not success then
-        local failedMessage = ("Failed to fetch key ( %s )"):format(errorMessage)
-
-        for keyName in next, exceptionKeys do
-            networkKeys[keyName] = failedMessage
+            
+            if exceptionKeysFound == exceptionKeyCount then
+                break
+            end
         end
     end
-end
+end)
 
+if not success then
+    local failedMessage = ("Failed to fetch key ( %s )"):format(errorMessage)
 
-function JailbreakLibrary:callRemote(remoteKey, ...)
-    local remote = keysList[networkKeys[remoteKey]]
-    
-    if remote then
-        remote:FireServer(...)
-    else
-        warn("Failed to find key for remote: " .. remoteKey)
+    for keyName in next, exceptionKeys do
+        networkKeys[keyName] = failedMessage
     end
 end
+end
 
--- Fetch keys from functions...
+--// Fetch keys from functions
 
 for keyName, keyFunction in next, keyFunctions do
-    local success, errorMessage = pcall(function()
-        local key = fetchKey(keyFunction()) or "Failed to fetch key"
-        networkKeys[keyName] = key
-        networkKeys[key] = key -- Store the key in the networkKeys table
-    end)
+local success, errorMessage = pcall(function()
+networkKeys[keyName] = fetchKey(keyFunction()) or "Failed to fetch key"
+end)
 
-    if not success or networkKeys[keyName] == "Failed to fetch key" then
-        if backupKeys[keyName] then
-            success, errorMessage = pcall(function()
-                local key = fetchKey(keyFunction(true)) or "Failed to fetch key"
-                networkKeys[keyName] = key
-                networkKeys[key] = key -- Store the key in the networkKeys table
-            end)
-        end
+if not success or networkKeys[keyName] == "Failed to fetch key" then
+    if backupKeys[keyName] then
+        success, errorMessage = pcall(function()
+            networkKeys[keyName] = fetchKey(keyFunction(true)) or "Failed to fetch key"
+        end)
+    end
 
-        if not success then
-            networkKeys[keyName] = ("Failed to fetch key (%s)"):format(errorMessage)
-        end
+    if not success then
+        networkKeys[keyName] = ("Failed to fetch key ( %s )"):format(errorMessage)
     end
 end
+end
 
--- Return variables
+--// Return variables
+
 local environment = getgenv()
-environment.networkKeys = networkKeys
-environment.network = network
 
-return JailbreakLibrary
+environment.networkKeys, environment.network = networkKeys, network
+
+return networkKeys, network
