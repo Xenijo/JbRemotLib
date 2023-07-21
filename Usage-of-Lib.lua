@@ -1,4 +1,4 @@
-local KeyFetcher = loadstring(game:HttpGet("https://raw.githubusercontent.com/Xenijo/JbRemotLib/main/Xenjiosjblib"))()
+local KeyFetcher = loadstring(game:HttpGet("https://raw.githubusercontent.com/Xenijo/JbRemotLib/main/Xenjiosjblib"))()--Not my keyfetcher i just edited some stuff
 
 local redeemCodeKey = networkKeys.RedeemCode
 local kickKey = networkKeys.Kick
