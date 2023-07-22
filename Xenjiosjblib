@@ -362,38 +362,6 @@ for keyName, keyFunction in next, keyFunctions do
     end
 end
 
-
-function Lib:getRawRemotes()
-    local rawRemotes = {}
-    
-    for keyName, keyFunction in next, keyFunctions do
-        local success, errorMessage = pcall(function()
-            local remoteObject = fetchRemote(keyFunction())
-            if remoteObject ~= "Failed to fetch remote" then
-                rawRemotes[keyName] = remoteObject
-            end
-        end)
-
-        if not success or rawRemotes[keyName] == nil then
-            if backupKeys[keyName] then
-                success, errorMessage = pcall(function()
-                    local remoteObject = fetchRemote(keyFunction(true))
-                    if remoteObject ~= "Failed to fetch remote" then
-                        rawRemotes[keyName] = remoteObject
-                    end
-                end)
-            end
-
-            if not success then
-                rawRemotes[keyName] = ("Failed to fetch remote ( %s )"):format(errorMessage)
-            end
-        end
-    end
-
-    return rawRemotes
-end
-
-
 --// Return variables
 local environment = getgenv()
 environment.networkKeys, environment.network = networkKeys, network
