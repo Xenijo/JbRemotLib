@@ -165,6 +165,12 @@ do -- damage
     end
 end
 
+do 
+keyFunctions.C4 = function()
+local c4 = require(game:GetService("ReplicatedStorage").Game.Item.C4)
+return getconstant(c4.ShootBegin,72)
+end
+
 do -- switchteam (needs to be called before jointeam)
     keyFunctions.JoinTeam = function()
         return getproto(teamChooseUI.Show, 4)
